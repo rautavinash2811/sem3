@@ -1,116 +1,150 @@
-#include "vector.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include "vector.h"
 
-int main() 
-{
-    Vector* v = vector_create(); // Create a vector
+// Display menu
+void display_menu() {
+    printf("\n--- Custom Vector Library ---\n");
+    printf("1. Push Back (Add Element)\n");
+    printf("2. Access Element at Index\n");
+    printf("3. Print Vector\n");
+    printf("4. Resize Vector\n");
+    printf("5. Check if Vector is Empty\n");
+    printf("6. Pop Back (Remove Last Element)\n");
+    printf("7. Clear Vector\n");
+    printf("8. Return a Copy of the Vector\n");
+    printf("9. Get First Element (front)\n");
+    printf("10. Get Last Element (back)\n");
+    printf("11. Get First Iterator (begin)\n");
+    printf("12. Get Last Iterator (end)\n");
+    printf("13. Get Reverse First Iterator (rbegin)\n");
+    printf("14. Get Reverse Last Iterator (rend)\n");
+    printf("15. Exit\n");
+}
+
+int main() {
+    Vector* v = vector_create();
     int choice, value, index;
 
-    while (1) 
-    {
-        // Menu for user interaction
-        printf("\n--- Custom Vector Library ---\n");
-        printf("1. Push Back (Add Element)\n");
-        printf("2. Access Element at Index\n");
-        printf("3. Print Vector\n");
-        printf("4. Resize Vector\n");
-        printf("5. Check if Vector is Empty\n");
-        printf("6. Pop Back (Remove Last Element)\n");
-        printf("7. Clear Vector\n");
-        printf("8. Return a Copy of the Vector\n");
-        printf("9. Exit\n");
+    while (1) {
+        display_menu();
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
-        switch (choice) 
-        {
-            case 1: // Push Back
-                printf("Enter value to push back: ");
+        switch (choice) {
+            case 1: // Push back (add element)
+                printf("Enter value to add: ");
                 scanf("%d", &value);
                 vector_push_back(v, value);
                 printf("Value %d added to the vector.\n", value);
                 break;
-
-            case 2: // Access Element at Index
-                printf("Enter index to access: ");
+            case 2: // Access element at index
+                printf("Enter index: ");
                 scanf("%d", &index);
-                if (index >= 0 && index < vector_size(v)) 
-                {
-                    printf("Element at index %d: %d\n", index, vector_at(v, index));
-                } else 
-                {
-                    printf("Invalid index!\n");
+                value = vector_at(v, index);
+                if (value != -1) {
+                    printf("Element at index %d: %d\n", index, value);
+                } else {
+                    printf("Index out of bounds.\n");
                 }
                 break;
-
-            case 3: // Print Vector
+            case 3: // Print vector
                 printf("Vector elements: ");
-                for (size_t i = 0; i < vector_size(v); i++) 
-                {
-                    printf("%d ", vector_at(v, i));
-                }
-                printf("\n");
+                vector_print(v);
                 break;
-
-            case 4: // Resize Vector
-                printf("Enter new capacity: ");
+            case 4: // Resize vector
+                printf("Enter new size: ");
                 scanf("%d", &value);
-                if (value >= vector_size(v)) 
-                {
-                    vector_resize(v, value);
-                    printf("Vector resized to capacity %d.\n", value);
-                } else 
-                {
-                    printf("New capacity must be >= current size (%zu).\n", vector_size(v));
-                }
+                vector_resize(v, value);
+                printf("Vector resized to size %d.\n", value);
                 break;
-
-            case 5: // Check if Vector is Empty
-                if (vector_empty(v)) 
-                {
+            case 5: // Check if vector is empty
+                if (vector_empty(v)) {
                     printf("Vector is empty.\n");
-                } else 
-                {
+                } else {
                     printf("Vector is not empty.\n");
                 }
                 break;
-
-            case 6: // Pop Back
-                if (vector_size(v) > 0) 
-                {
-                    vector_pop_back(v);
-                    printf("Last element removed.\n");
-                } else 
-                {
-                    printf("Vector is already empty.\n");
-                }
+            case 6: // Pop back (remove last element)
+                vector_pop_back(v);
+                printf("Last element removed from the vector.\n");
                 break;
-
-            case 7: // Clear Vector
+            case 7: // Clear vector
                 vector_clear(v);
                 printf("Vector cleared.\n");
                 break;
-
-            case 8: // Return a Copy of the Vector
+            case 8: // Return a copy of the vector
                 {
-                    Vector* v_copy = vector_return_copy(v);
-                    printf("Copied vector elements: ");
-                    for (size_t i = 0; i < vector_size(v_copy); i++) 
-                    {
-                        printf("%d ", vector_at(v_copy, i));
-                    }
-                    printf("\n");
-                    vector_destroy(v_copy); // Clean up the copy
+                    Vector* copy = vector_copy(v);
+                    printf("A copy of the vector has been created. Vector elements: ");
+                    vector_print(copy);
+                    free(copy->data);
+                    free(copy);
                 }
                 break;
-
-            case 9: // Exit
-                vector_destroy(v); // Clean up the original vector
-                printf("Exiting...\n");
+            case 9: // Get front (first element)
+                value = vector_front(v);
+                if (value != -1) {
+                    printf("Front element: %d\n", value);
+                } else {
+                    printf("Vector is empty.\n");
+                }
+                break;
+            case 10: // Get back (last element)
+                value = vector_back(v);
+                if (value != -1) {
+                    printf("Back element: %d\n", value);
+                } else {
+                    printf("Vector is empty.\n");
+                }
+                break;
+            case 11: // Get begin iterator
+                {
+                    int* begin = vector_begin(v);
+                    if (begin != NULL) {
+                        printf("First element via iterator: %d\n", *begin);
+                    } else {
+                        printf("Vector is empty.\n");
+                    }
+                }
+                break;
+            case 12: // Get end iterator
+                {
+                    int* end = vector_end(v);
+                    if (end != NULL) {
+                        printf("End iterator (one past last element): %d\n", *end);
+                    } else {
+                        printf("Vector is empty.\n");
+                    }
+                }
+                break;
+            case 13: // Get reverse begin iterator
+                {
+                    int* rbegin = vector_rbegin(v);
+                    if (rbegin != NULL) {
+                        printf("Reverse first element: %d\n", *rbegin);
+                    } else {
+                        printf("Vector is empty.\n");
+                    }
+                }
+                break;
+            case 14: // Get reverse end iterator
+                {
+                    int* rend = vector_rend(v);
+                    if (rend != NULL) {
+                        printf("Reverse last element (one before first): %d\n", *rend);
+                    } else {
+                        printf("Vector is empty.\n");
+                    }
+                }
+                break;
+            case 15: // Exit
+                printf("Exiting program...\n");
+                free(v->data);
+                free(v);
                 return 0;
-
             default:
-                printf("Invalid choice! Please try again.\n");
+                printf("Invalid choice. Please try again.\n");
         }
     }
 

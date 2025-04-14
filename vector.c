@@ -1,120 +1,123 @@
-#include "vector.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include "vector.h"
 
-// Create a new vector
-Vector* vector_create() 
-{
+// Function to create a vector
+Vector* vector_create() {
     Vector* v = (Vector*)malloc(sizeof(Vector));
-    if (!v) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(1);
-    }
     v->size = 0;
-    v->capacity = 1; // Start with a small capacity
+    v->capacity = 10;
     v->data = (int*)malloc(v->capacity * sizeof(int));
-    if (!v->data) 
-    {
-        free(v);
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(1);
-    }
     return v;
 }
 
-// Free memory allocated for the vector
-void vector_destroy(Vector* v) 
-{
-    if (v) 
-    {
-        free(v->data);
-        free(v);
-    }
-}
-
-// Add an element to the end of the vector
-void vector_push_back(Vector* v, int value) 
-{
-    if (v->size == v->capacity) 
-    {
-        // Double the capacity if full
-        vector_resize(v, v->capacity * 2);
+// Push back function
+void vector_push_back(Vector* v, int value) {
+    if (v->size == v->capacity) {
+        v->capacity *= 2;
+        v->data = (int*)realloc(v->data, v->capacity * sizeof(int));
     }
     v->data[v->size++] = value;
 }
 
-// Access element at a specific index
-int vector_at(const Vector* v, size_t index) 
-{
-    if (index >= v->size) {
-        fprintf(stderr, "Index out of bounds\n");
-        exit(1);
+// Pop back function
+void vector_pop_back(Vector* v) {
+    if (v->size > 0) {
+        --v->size;
     }
-    return v->data[index];
 }
 
-// Resize the vector to a new capacity
-void vector_resize(Vector* v, size_t new_capacity) 
-{
-    int* new_data = (int*)realloc(v->data, new_capacity * sizeof(int));
-    if (!new_data) 
-    {
-        fprintf(stderr, "Memory reallocation failed\n");
-        exit(1);
+// Resize function
+void vector_resize(Vector* v, size_t new_size) {
+    if (new_size > v->capacity) {
+        v->capacity = new_size;
+        v->data = (int*)realloc(v->data, v->capacity * sizeof(int));
     }
-    v->data = new_data;
-    v->capacity = new_capacity;
+    v->size = new_size;
 }
 
-// Get the size of the vector
-size_t vector_size(const Vector* v) 
-{
-    return v->size;
-}
-
-// Get the capacity of the vector
-size_t vector_capacity(const Vector* v) 
-{
-    return v->capacity;
+// Access an element by index
+int vector_at(Vector* v, size_t index) {
+    if (index < v->size) {
+        return v->data[index];
+    }
+    return -1; // Return -1 if index is out of bounds
 }
 
 // Check if the vector is empty
-int vector_empty(const Vector* v) 
-{
+int vector_empty(Vector* v) {
     return v->size == 0;
 }
 
-// Remove the last element
-void vector_pop_back(Vector* v) 
-{
-    if (v->size > 0) 
-    {
-        v->size--;
+// Print vector (Forward)
+void vector_print(Vector* v) {
+    for (size_t i = 0; i < v->size; ++i) {
+        printf("%d ", v->data[i]);
     }
+    printf("\n");
 }
 
 // Clear the vector
-void vector_clear(Vector* v) 
-{
+void vector_clear(Vector* v) {
     v->size = 0;
 }
 
 // Return a copy of the vector
-Vector* vector_return_copy(const Vector* v) 
-{
-    Vector* copy = vector_create();
-    copy->size = v->size;
-    copy->capacity = v->capacity;
-    copy->data = (int*)malloc(copy->capacity * sizeof(int));
-    if (!copy->data) 
-    {
-        vector_destroy(copy);
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(1);
+Vector* vector_copy(Vector* v) {
+    Vector* new_v = vector_create();
+    new_v->size = v->size;
+    new_v->capacity = v->capacity;
+    new_v->data = (int*)malloc(new_v->capacity * sizeof(int));
+    for (size_t i = 0; i < v->size; ++i) {
+        new_v->data[i] = v->data[i];
     }
-    for (size_t i = 0; i < v->size; i++) 
-    {
-        copy->data[i] = v->data[i];
+    return new_v;
+}
+
+// Get the first element
+int vector_front(Vector* v) {
+    if (v->size > 0) {
+        return v->data[0];
     }
-    return copy;
+    return -1; // Return -1 if vector is empty
+}
+
+// Get the last element
+int vector_back(Vector* v) {
+    if (v->size > 0) {
+        return v->data[v->size - 1];
+    }
+    return -1; // Return -1 if vector is empty
+}
+
+// Get the first iterator (begin)
+int* vector_begin(Vector* v) {
+    if (v->size > 0) {
+        return &v->data[0];
+    }
+    return NULL; // Return NULL if vector is empty
+}
+
+// Get the last iterator (end)
+int* vector_end(Vector* v) {
+    if (v->size > 0) {
+        return &v->data[v->size];
+    }
+    return NULL; // Return NULL if vector is empty
+}
+
+// Get the reverse first iterator (rbegin)
+int* vector_rbegin(Vector* v) {
+    if (v->size > 0) {
+        return &v->data[v->size - 1];
+    }
+    return NULL; // Return NULL if vector is empty
+}
+
+// Get the reverse last iterator (rend)
+int* vector_rend(Vector* v) {
+    if (v->size > 0) {
+        return &v->data[-1]; // Just past the first element in reverse iteration
+    }
+    return NULL; // Return NULL if vector is empty
 }

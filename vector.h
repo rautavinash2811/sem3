@@ -1,27 +1,30 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <stddef.h> // For size_t
+#include <stddef.h>
 
 // Define the Vector struct
-typedef struct 
-{
-    int* data;       // Pointer to the dynamic array
-    size_t size;     // Number of elements in the vector
-    size_t capacity; // Total capacity of the vector
+typedef struct {
+    int* data;
+    size_t size;
+    size_t capacity;
 } Vector;
 
-// Function prototypes
-Vector* vector_create();                            // Create a new vector
-void vector_destroy(Vector* v);                     // Free memory
-void vector_push_back(Vector* v, int value);        // Add an element to the end
-int vector_at(const Vector* v, size_t index);       // Access element at index
-void vector_resize(Vector* v, size_t new_capacity); // Resize the vector
-size_t vector_size(const Vector* v);                // Get the size of the vector
-size_t vector_capacity(const Vector* v);            // Get the capacity of the vector
-int vector_empty(const Vector* v);                  // Check if the vector is empty
-void vector_pop_back(Vector* v);                    // Remove the last element
-void vector_clear(Vector* v);                       // Clear the vector
-Vector* vector_return_copy(const Vector* v);        // Return a copy of the vector
+// Function declarations
+Vector* vector_create();
+void vector_push_back(Vector* v, int value);
+void vector_pop_back(Vector* v);
+void vector_resize(Vector* v, size_t new_size);
+int vector_at(Vector* v, size_t index);
+int vector_empty(Vector* v);
+void vector_print(Vector* v);
+void vector_clear(Vector* v);
+Vector* vector_copy(Vector* v);
+int vector_front(Vector* v);
+int vector_back(Vector* v);
+int* vector_begin(Vector* v);
+int* vector_end(Vector* v);
+int* vector_rbegin(Vector* v);
+int* vector_rend(Vector* v);
 
 #endif // VECTOR_H
