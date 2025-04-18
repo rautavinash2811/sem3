@@ -1,7 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-typedef struct {
+typedef struct 
+{
     int *data;
     int size;
     int capacity;
@@ -23,5 +24,5 @@ int *end(Vector *v);
 int *rbegin(Vector *v);
 int *rend(Vector *v);
 void free_vector(Vector *v);
-
+int myfun();
 #endif

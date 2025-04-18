@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include "vector.h"
 
-int main() {
+int main() 
+{
     Vector v;
     init_vector(&v);
 
     int choice, value, index, new_capacity;
 
-    while (1) {
+    while (1) 
+    {
         printf("\n--- Custom Vector Library ---\n");
         printf("1. Push Back (Add Element)\n");
         printf("2. Access Element at Index\n");
@@ -27,11 +29,19 @@ int main() {
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
-        switch (choice) {
+        int p=0;
+        switch (choice) 
+        {
             case 1:
-                printf("Enter value to add: ");
-                scanf("%d", &value);
-                push_back(&v, value);
+                printf("How many elements you want to ad : ");
+                //scanf("%d",&p);
+                int p = myfun();
+                for(int i=0;i<p;i++)
+                {
+                    printf("Enter the %d value to add: ",(i+1));
+                    scanf("%d", &value);
+                    push_back(&v, value);
+                }
                 break;
             case 2:
                 printf("Enter index: ");
@@ -61,7 +71,8 @@ int main() {
                 clear(&v);
                 printf("Vector cleared.\n");
                 break;
-            case 8: {
+            case 8: 
+            {
                 Vector copy_v = copy(&v);
                 printf("Copied vector: ");
                 print_vector(&copy_v);
