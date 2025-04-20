@@ -11,17 +11,24 @@ void init_vector(Vector *v)
 
 void resize(Vector *v, int new_capacity) 
 {
-    if (new_capacity <= v->capacity) return;
+    if (new_capacity == v->capacity)
+        return;
 
     int *new_data = (int *)malloc(sizeof(int) * new_capacity);
-    for (int i = 0; i < v->size; i++) {
+    
+    // Copy only up to new_capacity or existing size
+    int new_size = v->size < new_capacity ? v->size : new_capacity;
+
+    for (int i = 0; i < new_size; i++) {
         new_data[i] = v->data[i];
     }
 
     free(v->data);
     v->data = new_data;
     v->capacity = new_capacity;
+    v->size = new_size; // update size if reduced
 }
+
 
 void push_back(Vector *v, int value) 
 {
@@ -36,7 +43,8 @@ int at(Vector *v, int index)
     if (index < 0 || index >= v->size) 
     {
         printf("Index out of bounds\n");
-        exit(1);
+        // exit(1);
+        return -1;
     }
     return v->data[index];
 }
@@ -131,18 +139,24 @@ void free_vector(Vector *v)
     v->capacity = 0;
 }
 
-int myfun() {
+int myfun() 
+{
     int n;
-    while (1) {
-        printf("Please enter an integer: ");
+    while (1) 
+    {
+        // printf("Please enter an integer: ");
         
         // Try to read the input
-        if (scanf("%d", &n) == 1) {
+        if (scanf("%d", &n) == 1) 
+        {
             // If the input is a valid integer, break out of the loop
             return n;
-        } else {
+        }
+         else 
+        {
             // If input is not an integer, show an error message and clear the input buffer
-            printf("Invalid input! Please enter a valid integer.\n");
+            printf("Invalid input!");
+            printf("Please enter a valid integer : ");
             
             // Clear the invalid input from the buffer
             while (getchar() != '\n'); // Flush the rest of the line (clear invalid input)

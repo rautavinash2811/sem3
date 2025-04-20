@@ -6,7 +6,7 @@ int main()
     Vector v;
     init_vector(&v);
 
-    int choice, value, index, new_capacity;
+    int choice, value, index, new_size;
 
     while (1) 
     {
@@ -25,11 +25,13 @@ int main()
         printf("12. Get Last Iterator (end)\n");
         printf("13. Get Reverse First Iterator (rbegin)\n");
         printf("14. Get Reverse Last Iterator (rend)\n");
-        printf("15. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-
+        printf("15. Get Current Size and Capacity\n");
+        printf("16. Exit\n");
+        printf("Enter your choice : ");
+        // scanf("%d", &choice);
+        choice = myfun();
         int p=0;
+        
         switch (choice) 
         {
             case 1:
@@ -39,22 +41,32 @@ int main()
                 for(int i=0;i<p;i++)
                 {
                     printf("Enter the %d value to add: ",(i+1));
-                    scanf("%d", &value);
+                    value = myfun();
                     push_back(&v, value);
                 }
                 break;
             case 2:
                 printf("Enter index: ");
-                scanf("%d", &index);
-                printf("Element at index %d is %d\n", index, at(&v, index));
-                break;
+                // scanf("%d", &index);
+                index = myfun();
+                int findindex = at(&v,index);
+                if(findindex==-1)
+                {
+                    break;
+                }
+                else
+                {
+                    printf("Element at index %d is %d\n", index, findindex);
+                    break;
+                }
             case 3:
                 print_vector(&v);
                 break;
             case 4:
-                printf("Enter new capacity: ");
-                scanf("%d", &new_capacity);
-                resize(&v, new_capacity);
+                printf("Enter new size: ");
+                // scanf("%d", &new_size);
+                new_size = myfun();
+                resize(&v, new_size);
                 printf("Vector resized.\n");
                 break;
             case 5:
@@ -94,14 +106,25 @@ int main()
             case 13:
                 printf("First reverse element using rbegin(): %d\n", *rbegin(&v));
                 break;
+
             case 14:
-                printf("Reverse end is before start. rend() points before data[0].\n");
+                printf("Reverse elements: ");
+                for (int *ptr = rbegin(&v); ptr != rend(&v); --ptr) 
+                {
+                    printf("%d ", *ptr);
+                }
+                printf("\n");
                 break;
+            
             case 15:
+                printf("Current size: %d\n", v.size);
+                printf("Current capacity: %d\n", v.capacity);
+                break;
+            case 16:
                 free_vector(&v);
                 return 0;
             default:
-                printf("Invalid choice.\n");
+                printf("Invalid choice from default.\n");
         }
     }
 }
