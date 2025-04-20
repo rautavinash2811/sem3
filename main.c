@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include "vector.h"
 
+// Custom input function for integer input
+// int myfun() 
+// {
+//     int value;
+//     scanf("%d", &value);
+//     return value;
+// }
+
 int main() 
 {
     Vector v;
@@ -27,30 +35,27 @@ int main()
         printf("14. Get Reverse Last Iterator (rend)\n");
         printf("15. Get Current Size and Capacity\n");
         printf("16. Exit\n");
-        printf("Enter your choice : ");
-        // scanf("%d", &choice);
-        choice = myfun();
-        int p=0;
+        printf("Enter your choice: ");
+        
+        choice = myfun();  // Get choice using myfun()
         
         switch (choice) 
         {
             case 1:
-                printf("How many elements you want to ad : ");
-                //scanf("%d",&p);
-                int p = myfun();
-                for(int i=0;i<p;i++)
+                printf("How many elements do you want to add: ");
+                int p = myfun();  // Get the number of elements to add using myfun()
+                for (int i = 0; i < p; i++) 
                 {
-                    printf("Enter the %d value to add: ",(i+1));
-                    value = myfun();
+                    printf("Enter value %d to add: ", (i + 1));
+                    value = myfun();  // Get value to add using myfun()
                     push_back(&v, value);
                 }
                 break;
             case 2:
                 printf("Enter index: ");
-                // scanf("%d", &index);
-                index = myfun();
-                int findindex = at(&v,index);
-                if(findindex==-1)
+                index = myfun();  // Get index using myfun()
+                int findindex = at(&v, index);
+                if (findindex == -1)
                 {
                     break;
                 }
@@ -64,8 +69,7 @@ int main()
                 break;
             case 4:
                 printf("Enter new size: ");
-                // scanf("%d", &new_size);
-                new_size = myfun();
+                new_size = myfun();  // Get new size using myfun()
                 resize(&v, new_size);
                 printf("Vector resized.\n");
                 break;
@@ -124,7 +128,7 @@ int main()
                 free_vector(&v);
                 return 0;
             default:
-                printf("Invalid choice from default.\n");
+                printf("Invalid choice.\n");
         }
     }
 }
